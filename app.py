@@ -46,7 +46,7 @@ def connect_to_mysql():
 def close_mysql_connection(conn, cursor):
     conn.commit()
     cursor.close()
-    conn.close()
+    conn.close() 
 
 # @celery.task(bind=True)
 # def celery_download_data(self, ticker):
