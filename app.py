@@ -11,7 +11,7 @@ import os
 
 
 app = Flask(__name__)
-CORS(app, resources={r'/api/*': {'origins': 'http://localhost:3000'}})
+CORS(app, resources={r'/api/*': {'origins': ['http://localhost:3000', 'https://joshuahallam127.github.io']}})
 # celery = Celery()
 # celery.config_from_object(celery_config)
 # conn = sqlite3.connect('database.db')
