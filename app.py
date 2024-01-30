@@ -1,5 +1,5 @@
 from flask import Flask, request, abort, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import pytz
 import datetime
 # from celery import Celery
@@ -150,6 +150,7 @@ def get_data():
     return jsonify({'1min': data_1min, '1day': data_1day})
 
 @app.route('/api/list_ticker_options', methods=['GET'])
+@cross_origin()
 def list_ticker_options():
     # return all the loaded datasets from the mysql database
     conn, cursor = connect_to_mysql()
