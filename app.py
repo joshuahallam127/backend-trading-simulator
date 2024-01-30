@@ -2,6 +2,7 @@ from flask import Flask, request, abort, jsonify
 from flask_cors import CORS, cross_origin
 import pytz
 import datetime
+import logging
 # from celery import Celery
 # from celery.result import AsyncResult
 # import celery_config
@@ -11,9 +12,9 @@ import os
 
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 # CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
-# CORS(app, resources={r'/api/*': { 'origins': ['http://localhost:3000', 'https://joshuahallam127.github.io/']}})
+CORS(app, resources={r'/api/*': { 'origins': ['http://localhost:3000', 'https://joshuahallam127.github.io/']}})
 # CORS(app, resources={r'/api/*': {'origins': '*'}}, supports_credentials=True)
 # CORS(app)
 # app.config['CORS_HEADERS'] = 'Content-Type'
