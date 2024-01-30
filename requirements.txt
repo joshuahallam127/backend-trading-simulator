@@ -28,7 +28,7 @@ markupsafe==2.1.4
     #   werkzeug
 mysql==0.0.3
     # via -r requirements.in
-mysql-connector==2.2.9
+mysql-connector-python==8.3.0
     # via -r requirements.in
 mysqlclient==2.2.1
     # via mysql
