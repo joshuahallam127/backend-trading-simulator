@@ -88,6 +88,7 @@ def index():
 
 @app.route('/api/get_remaining_calls', methods=['GET'])
 def get_remaining_calls():
+    abort(400, 'This endpoint is not currently available')
     # get how many api calls we have for the rest of the day stored in mysql database, update if need be
     conn, cursor = connect_to_mysql()
     cursor.execute('select * from calls')
@@ -108,6 +109,7 @@ def get_remaining_calls():
 
 @app.route('/api/get_months_data', methods=['GET'])
 def get_months_data():
+    abort(400, 'This endpoint is not currently available')
     # get the arguments passed
     ticker = request.args.get('ticker', None)
     if ticker is None:
@@ -129,6 +131,7 @@ def get_months_data():
 
 @app.route('/api/get_data', methods=['GET'])
 def get_data():
+    abort(400, 'This endpoint is not currently available')
     # get the arguments parsed
     ticker = request.args.get('ticker', None)
     if ticker is None:
@@ -156,6 +159,7 @@ def get_data():
 @app.route('/api/list_ticker_options', methods=['GET'])
 @cross_origin()
 def list_ticker_options():
+    abort(400, 'This endpoint is not currently available')
     # return all the loaded datasets from the mysql database
     conn, cursor = connect_to_mysql()
     cursor.execute('select distinct ticker from stocks')
