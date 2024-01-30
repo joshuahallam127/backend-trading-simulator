@@ -12,7 +12,8 @@ import os
 
 app = Flask(__name__)
 # CORS(app, resources={r'/api/*': {'origins': ['http://localhost:3000', 'https://joshuahallam127.github.io/']}})
-CORS(app, resources={r'/api/*': {'origins': '*'}})
+# CORS(app, resources={r'/api/*': {'origins': '*'}})
+CORS(app)
 # CORS(app, origins="*", allow_headers=[
 #     "Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
 #     supports_credentials=True, intercept_exceptions=False)
