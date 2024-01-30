@@ -86,23 +86,27 @@ def index():
 
 @app.route('/api/get_remaining_calls', methods=['GET'])
 def get_remaining_calls():
-    # get how many api calls we have for the rest of the day stored in mysql database, update if need be
-    conn, cursor = connect_to_mysql()
-    cursor.execute('select * from calls')
-    _, last_call_date, calls_remaining = cursor.fetchone()
-    eastern = pytz.timezone('US/Eastern')
-    now = datetime.datetime.now()
-    now = now.replace(tzinfo=pytz.utc).astimezone(eastern)
-    date = f'{now.year}{now.month}{now.day}'
-    if last_call_date != date:
-        calls_remaining = 25
-        cursor.execute('update calls set lastQueryDate=%s, callsRemaining=%s', (date, calls_remaining))
-        conn.commit()
-        cursor = conn.cursor()
-    close_mysql_connection(conn, cursor)
+    return jsonify(10)
 
-    # return the number of calls we have left
-    return jsonify(calls_remaining)
+# @app.route('/api/get_remaining_calls', methods=['GET'])
+# def get_remaining_calls():
+#     # get how many api calls we have for the rest of the day stored in mysql database, update if need be
+#     conn, cursor = connect_to_mysql()
+#     cursor.execute('select * from calls')
+#     _, last_call_date, calls_remaining = cursor.fetchone()
+#     eastern = pytz.timezone('US/Eastern')
+#     now = datetime.datetime.now()
+#     now = now.replace(tzinfo=pytz.utc).astimezone(eastern)
+#     date = f'{now.year}{now.month}{now.day}'
+#     if last_call_date != date:
+#         calls_remaining = 25
+#         cursor.execute('update calls set lastQueryDate=%s, callsRemaining=%s', (date, calls_remaining))
+#         conn.commit()
+#         cursor = conn.cursor()
+#     close_mysql_connection(conn, cursor)
+
+#     # return the number of calls we have left
+#     return jsonify(calls_remaining)
 
 @app.route('/api/get_months_data', methods=['GET'])
 def get_months_data():
