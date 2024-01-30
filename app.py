@@ -7,6 +7,8 @@ import datetime
 # import celery_config
 # import mysql
 import mysql.connector
+import os
+
 
 app = Flask(__name__)
 CORS(app, resources={r'/api/*': {'origins': 'http://localhost:3000'}})
@@ -17,7 +19,7 @@ CORS(app, resources={r'/api/*': {'origins': 'http://localhost:3000'}})
 def connect_to_mysql():
     conn = mysql.connector.connect(
         user='avnadmin',
-        password='AVNS_WYOn4aUkiDqTtooOxYA',
+        password=os.environ['AVNADMIN_PASSWORD'],
         host='mysql-database-trading-simulator.a.aivencloud.com',
         port='25687',
         database='defaultdb',
