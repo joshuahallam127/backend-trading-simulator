@@ -12,7 +12,7 @@ import os
 
 app = Flask(__name__)
 # CORS(app, resources={r'/api/*': {'origins': ['http://localhost:3000', 'https://joshuahallam127.github.io/']}})
-CORS(app, resources={r'/api/*': {'origins': '*'}})
+CORS(app, resources={r'/api/*': {'origins': '*'}}, supports_credentials=True)
 # CORS(app)
 # app.config['CORS_HEADERS'] = 'Content-Type'
 # CORS(app, origins="*", allow_headers=[
