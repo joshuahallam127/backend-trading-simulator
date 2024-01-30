@@ -24,13 +24,6 @@ CORS(app,  resources={r"/api/*": {"origins": "http://localhost:3000"}})
 # celery.config_from_object(celery_config)
 # conn = sqlite3.connect('database.db')
 
-@app.after_request
-def add_cors_headers(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
-
 def connect_to_mysql():
     conn = mysql.connector.connect(
         user='avnadmin',
