@@ -2,7 +2,7 @@ from flask import Flask, request, abort, jsonify
 from flask_cors import CORS, cross_origin
 import pytz
 import datetime
-import logging
+from dotenv import load_dotenv
 # from celery import Celery
 # from celery.result import AsyncResult
 # import celery_config
@@ -10,7 +10,7 @@ import logging
 import mysql.connector
 import os
 
-
+load_dotenv()
 app = Flask(__name__)
 # CORS(app)
 # CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
