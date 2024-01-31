@@ -42,6 +42,8 @@ zope-interface==6.1
     # via datetime
 gunicorn==21.2.0
     # via -r requirements.in
+python-dotenv==1.0.1
+    # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
