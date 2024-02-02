@@ -135,17 +135,19 @@ def get_months_data():
 def get_data():
     # get the arguments parsed
     ticker = request.args.get('ticker', None)
-    if ticker is None:
-        abort(400, 'Ticker or interval paramater is missing')
-
-    loaded_datasets = list_ticker_options().json
-    # return empty arrays if no data
-    if ticker not in loaded_datasets:
-        return jsonify({'1minute': [], '1day': []})
+    start_month = request.args.get('startMonth', None)
+    end_month = request.args.get('endMonth', None)
+    if ticker is None or start_month is None or end_month is None:
+        abort(400, 'Missing parameters')
     
     # get the data from the mysql database
     conn, cursor = connect_to_mysql()
-    cursor.execute('select date, intervalLabel, close from stocks where ticker=%s order by intervalLabel, date asc', (ticker,))
+    cursor.execute('''
+                   select date, intervalLabel, close 
+                    from stocks 
+                    where ticker=%s and date>=%s and date<=%s 
+                    order by intervalLabel, date asc
+                   ''', (ticker, start_month, end_month))
     data = cursor.fetchall()
     data_1min = []
     data_1day = []
@@ -155,6 +157,7 @@ def get_data():
         elif line[1] == '1day':
             data_1day.append([line[0], line[2]])
     close_mysql_connection(conn, cursor)
+
     return jsonify({'1min': data_1min, '1day': data_1day})
 
 @app.route('/api/list_ticker_options', methods=['GET'])
