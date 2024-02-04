@@ -89,7 +89,7 @@ def index():
 
 @app.route('/api/get_remaining_calls', methods=['GET'])
 @cross_origin()
-def get_remaining_calls():
+def get_remaining_calls(): 
     # get how many api calls we have for the rest of the day stored in mysql database, update if need be
     conn, cursor = connect_to_mysql()
     cursor.execute('select * from calls')
