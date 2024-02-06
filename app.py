@@ -213,8 +213,8 @@ def download_data():
                     months.append(f'{i}-{j:02}')
 
     # remove data from first month if exists in the database
-    # conn, cursor = connect_to_mysql()
-    # cursor.execute('delete from stocks where ticker=%s and date like %s', (ticker, f'{start_year}-{start_month:02}%'))
+    conn, cursor = connect_to_mysql()
+    cursor.execute('delete from stocks where ticker=%s and date like %s', (ticker, f'{start_year}-{start_month:02}%'))
 
     batch_data = []
 
@@ -233,6 +233,7 @@ def download_data():
         # clean up 1min data
         new_data = []
 
+        new_data.append(data[0])
         prev_datetime, prev_close = data[0][0], data[0][4]
         prev_date, prev_time = prev_datetime.split()
         prev_hour, prev_min = int(prev_time.split(':')[0]), int(prev_time.split(':')[1])
@@ -288,21 +289,27 @@ def download_data():
         for values in data_1day:
             batch_data.append((ticker, '1day', values[0], values[1], values[2], values[3], values[4], values[5]))
 
-        return jsonify(data_1day)
+        # return jsonify({'1day': data_1day, '1min': new_data})
 
-        # if len(batch_data) > 100000:
-        #     print('batching data')
-        #     cursor.executemany('insert into stocks values (%s, %s, %s, %s, %s, %s, %s, %s)', batch_data)
-        #     batch_data = []
+        if len(batch_data) > 100000:
+            print('batching data')
+            cursor.executemany('insert into stocks values (%s, %s, %s, %s, %s, %s, %s, %s)', batch_data)
+            batch_data = []
 
+    if batch_data:
+        cursor.executemany('insert into stocks values (%s, %s, %s, %s, %s, %s, %s, %s)', batch_data)
+    
+    # update calls remaining
+    cursor.execute('select * from calls')
+    calls_remaining = cursor.fetchone()[2]
+    eastern = pytz.timezone('US/Eastern')
+    now = datetime.datetime.now()
+    now = now.replace(tzinfo=pytz.utc).astimezone(eastern)
+    date = f'{now.year}{now.month}{now.day}'
+    cursor.execute('update calls set lastQueryDate=%s, callsRemaining=%s', (date, calls_remaining - len(months)))
 
-
-    # if batch_data:
-    #     print('batching data')
-    #     cursor.executemany('insert into stocks values (%s, %s, %s, %s, %s, %s, %s, %s)', batch_data)
-
-    # close_mysql_connection(conn, cursor)
-    return jsonify(data[:100])
+    close_mysql_connection(conn, cursor)
+    return jsonify('succesffuly downloaded data')
 
 
 
