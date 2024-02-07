@@ -197,11 +197,11 @@ def download_data():
                         # add in the missing minute
                         prev_hour += 1
                         prev_min = 0
-                        new_data.append([prev_date, f'{prev_hour:02}:{prev_min:02}:00', prev_close, prev_close, prev_close, prev_close, 0])
+                        new_data.append([f'{prev_date} {prev_hour:02}:{prev_min:02}:00', prev_close, prev_close, prev_close, prev_close, 0])
                 else:
                     # add in the missing minute
                     prev_min += 1
-                    new_data.append([prev_date, f'{prev_hour:02}:{prev_min:02}:00', prev_close, prev_close, prev_close, prev_close, 0])
+                    new_data.append([f'{prev_date} {prev_hour:02}:{prev_min:02}:00', prev_close, prev_close, prev_close, prev_close, 0])
         for values in new_data:
             batch_data.append((ticker, '1min', values[0], values[1], values[2], values[3], values[4], values[5]))
         
