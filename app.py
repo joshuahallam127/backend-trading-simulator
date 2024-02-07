@@ -5,33 +5,11 @@ import datetime
 from dotenv import load_dotenv
 import mysql.connector
 import os
-from celery import Celery, Task
 import requests
 
 load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r'/api/*': { 'origins': ['http://localhost:3000', 'https://joshuahallam127.github.io/']}})
-app.config.from_mapping(
-    CELERY=dict(
-        broker_url="redis://localhost",
-        result_backend="redis://localhost",
-        task_ignore_result=True,
-    ),
-)
-
-def celery_init_app(app: Flask) -> Celery:
-    class FlaskTask(Task):
-        def __call__(self, *args: object, **kwargs: object) -> object:
-            with app.app_context():
-                return self.run(*args, **kwargs)
-
-    celery_app = Celery(app.name, task_cls=FlaskTask)
-    celery_app.config_from_object(app.config["CELERY"])
-    celery_app.set_default()
-    app.extensions["celery"] = celery_app
-    return celery_app
-
-celery_app = celery_init_app(app)
 
 def connect_to_mysql():
     conn = mysql.connector.connect(
@@ -48,47 +26,6 @@ def close_mysql_connection(conn, cursor):
     conn.commit()
     cursor.close()
     conn.close() 
-
-# @celery.task(bind=True)
-# def celery_download_data(self, ticker):
-#     # download data using other python program
-#     os.system('test.py')
-#     # os.system(f'python download_data.py {ticker.lower()} -w')
-
-# @app.route('/api/download_data', methods=['GET'])
-# def download_data():
-#     ticker = request.args.get('ticker', None)
-#     start_month = request.args.get('startMonth', None)
-#     end_month = request.args.get('endMonth', None)
-#     cost = request.args.get('cost', None)
-#     if ticker is None or start_month is None or end_month is None or cost is None:
-#         abort(400, 'Missing arguments')
-
-#     # make sure we have enough api calls left to do this
-#     if calls_remaining < int(cost):
-#         return jsonify('Sorry, that operation is too expensive, please wait until tomorrow for the api \
-#                        calls to reset to 25.')
-    
-#     # DOWNLOAD DATA CODE HERE
-#     task = celery_download_data.apply_async(args=[ticker])
-
-#     # tell user data is downloading, let the client query until data is downloaded
-#     return jsonify({
-#         'message': 'Downloading data. Please wait...', 
-#         'status': 'downloading', 
-#         'task_id': str(task.id)})
-
-# @app.route('/api/check_task_status', methods=['GET'])
-# def check_task_status():
-#     task_id = request.args.get('task_id', None)
-#     if task_id is None:
-#         abort(400, 'Task ID paramater is missing')
-    
-#     result = AsyncResult(task_id)
-#     if result.ready():
-#         return jsonify('COMPLETED')
-#     else:
-#         return jsonify('IN_PROGRESS')
     
 @app.route('/', methods=['GET'])
 def index():
