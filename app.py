@@ -27,9 +27,9 @@ def close_mysql_connection(conn, cursor):
     cursor.close()
     conn.close() 
     
-@app.route('/', methods=['GET'])
+@app.route('/api', methods=['GET'])
 def index():
-    return 'Hello World'
+    return 'Running!'
 
 @app.route('/api/get_remaining_calls', methods=['GET'])
 @cross_origin()
@@ -163,7 +163,7 @@ def download_data():
         arr = data.split('\r\n')[1:]
         arr.reverse()
         if not arr:
-            abort(400, 'ran out of api calls')
+            return jsonify('FAILED')
         arr.pop(0)
         data = [line.split(',') for line in arr]
 
@@ -192,7 +192,10 @@ def download_data():
                 if prev_min == 59:
                     # check if we're at the end of a day
                     if prev_hour == 15:
-                        return jsonify(f'There is no volume at the beginning of the day at {date} {time}')
+                        prev_hour = 9
+                        prev_min = 30
+                        prev_date, prev_time = date, '09:30:00'
+                        new_data.append([f'{date} 09:30:00', prev_close, prev_close, prev_close, prev_close, 0])
                     else:
                         # add in the missing minute
                         prev_hour += 1
@@ -225,8 +228,6 @@ def download_data():
 
         for values in data_1day:
             batch_data.append((ticker, '1day', values[0], values[1], values[2], values[3], values[4], values[5]))
-
-        # return jsonify({'1day': data_1day, '1min': new_data})
 
         if len(batch_data) > 100000:
             print('batching data')
