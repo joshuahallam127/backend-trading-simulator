@@ -28,6 +28,7 @@ def close_mysql_connection(conn, cursor):
     conn.close() 
     
 @app.route('/api', methods=['GET'])
+@cross_origin()
 def index():
     return 'Running!'
 
