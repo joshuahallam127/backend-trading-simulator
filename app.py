@@ -164,6 +164,7 @@ def download_data():
         arr = data.split('\r\n')[1:]
         arr.reverse()
         if not arr:
+            return jsonify(data)
             return jsonify('FAILED')
         arr.pop(0)
         data = [line.split(',') for line in arr]
